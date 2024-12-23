@@ -15,7 +15,7 @@ public class MataPelajaran {
     private String tingkatKelas;
 
 
-    // Constructor dan Getter/Setter
+    // Getter
 
     public int getIdMataPelajaran() {
         return idMataPelajaran;
@@ -32,6 +32,8 @@ public class MataPelajaran {
     public String getTingkatKelas() {
         return tingkatKelas;
     }
+    
+    //Setter
     
     public void setIdMataPelajaran(int idMataPelajaran) {
         this.idMataPelajaran = idMataPelajaran;

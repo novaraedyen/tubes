@@ -24,19 +24,38 @@ public class Guru {
         this.jenisKelamin = jenisKelamin;
     }
 
-    // Getter dan Setter
-    public int getIdGuru() { return idGuru; }
-    public void setIdGuru(int idGuru) { this.idGuru = idGuru; }
-
-    public String getNamaDepan() { return namaDepan; }
-    public void setNamaDepan(String namaDepan) { this.namaDepan = namaDepan; }
-
-    public String getNamaBelakang() { return namaBelakang; }
-    public void setNamaBelakang(String namaBelakang) { this.namaBelakang = namaBelakang; }
-
-    public String getTanggalLahir() { return tanggalLahir; }
-    public void setTanggalLahir(String tanggalLahir) { this.tanggalLahir = tanggalLahir; }
-
-    public String getJenisKelamin() { return jenisKelamin; }
-    public void setJenisKelamin(String jenisKelamin) { this.jenisKelamin = jenisKelamin; }
+    // Getter 
+    public int getIdGuru() {
+        return idGuru; 
+    }
+    public String getNamaDepan() {
+        return namaDepan; 
+    }
+    public String getNamaBelakang() {
+        return namaBelakang; 
+    }
+    public String getTanggalLahir() {
+        return tanggalLahir; 
+    }
+    public String getJenisKelamin() {
+        return jenisKelamin; 
+    }
+    
+    //Setter
+    public void setIdGuru(int idGuru) {
+        this.idGuru = idGuru; 
+    }
+    public void setNamaDepan(String namaDepan) {
+        this.namaDepan = namaDepan; 
+    }
+    public void setNamaBelakang(String namaBelakang) {
+        this.namaBelakang = namaBelakang; 
+    }
+    public void setTanggalLahir(String tanggalLahir) {
+        this.tanggalLahir = tanggalLahir; 
+    }
+    public void setJenisKelamin(String jenisKelamin) {
+        this.jenisKelamin = jenisKelamin; 
+    }
+    
 }

@@ -17,7 +17,7 @@ public class PenugasanGuru {
 
 
 
-    // Constructor dan Getter/Setter
+    // Constructor dan Getter
 
     public int getIdPenugasan() {
         return idPenugasan;
@@ -39,7 +39,8 @@ public class PenugasanGuru {
         return idMataPelajaran;
     }
     
-        public void setIdPenugasan(int idPenugasan) {
+    //Setter
+    public void setIdPenugasan(int idPenugasan) {
         this.idPenugasan = idPenugasan;
     }
 

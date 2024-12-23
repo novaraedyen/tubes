@@ -8,6 +8,7 @@ package manajemen_data_guru;
  *
  * @author lenov
  */
+
 public class Jurusan {
     private int idJurusan;
     private String namaJurusan;
@@ -19,14 +20,26 @@ public class Jurusan {
         this.idSekolah = idSekolah;
     }
 
-    // Getter dan Setter
-    public int getIdJurusan() { return idJurusan; }
-    public void setIdJurusan(int idJurusan) { this.idJurusan = idJurusan; }
-
-    public String getNamaJurusan() { return namaJurusan; }
-    public void setNamaJurusan(String namaJurusan) { this.namaJurusan = namaJurusan; }
-
-    public int getIdSekolah() { return idSekolah; }
-    public void setIdSekolah(int idSekolah) { this.idSekolah = idSekolah; }
+    // Getter 
+    public int getIdJurusan() {
+        return idJurusan; 
+    }
+    public String getNamaJurusan() {
+        return namaJurusan; 
+    }
+    public int getIdSekolah() {
+        return idSekolah; 
+    }
+    
+    //Setter
+    public void setIdJurusan(int idJurusan) {
+        this.idJurusan = idJurusan; 
+    }
+    public void setNamaJurusan(String namaJurusan) {
+        this.namaJurusan = namaJurusan; 
+    }
+    public void setIdSekolah(int idSekolah) {
+        this.idSekolah = idSekolah; 
+    }
 }
 

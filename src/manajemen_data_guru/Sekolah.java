@@ -21,23 +21,7 @@ public Sekolah(int idSekolah, String namaSekolah, String alamat, String nomorKon
         this.nomorKontak = nomorKontak;
     }
 
-
-    public void setIdSekolah(int idSekolah) {
-        this.idSekolah = idSekolah;
-    }
-
-    public void setNamaSekolah(String namaSekolah) {
-        this.namaSekolah = namaSekolah;
-    }
-
-    public void setAlamat(String alamat) {
-        this.alamat = alamat;
-    }
-
-    public void setNamaKontak(String namaKontak) {
-        this.nomorKontak = namaKontak;
-    }
-
+    //getter
     public int getIdSekolah() {
         return idSekolah;
     }
@@ -52,6 +36,23 @@ public Sekolah(int idSekolah, String namaSekolah, String alamat, String nomorKon
 
     public String getNamaKontak() {
         return nomorKontak;
+    }
+     
+    //setter
+    public void setIdSekolah(int idSekolah) {
+        this.idSekolah = idSekolah;
+    }
+
+    public void setNamaSekolah(String namaSekolah) {
+        this.namaSekolah = namaSekolah;
+    }
+
+    public void setAlamat(String alamat) {
+        this.alamat = alamat;
+    }
+
+    public void setNamaKontak(String namaKontak) {
+        this.nomorKontak = namaKontak;
     }
     
 }

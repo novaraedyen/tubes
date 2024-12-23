@@ -8,6 +8,7 @@ package manajemen_data_guru;
  *
  * @author lenov
  */
+
 public class Pengguna {
     private int idPengguna;
     private String namaPengguna;
@@ -16,7 +17,7 @@ public class Pengguna {
     private int idGuru;
 
 
-    // Constructor dan Getter/Setter
+    // Constructor dan Getter
 
     public int getIdPengguna() {
         return idPengguna;
@@ -38,6 +39,7 @@ public class Pengguna {
         return idGuru;
     }
     
+    //Setter
     public void setIdPengguna(int idPengguna) {
         this.idPengguna = idPengguna;
     }
