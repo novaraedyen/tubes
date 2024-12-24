@@ -4,6 +4,13 @@
  */
 package manajemen_data_guru;
 
+import java.awt.*;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.sql.*;
+import javax.swing.*;
+
 /**
  *
  * @author lenov
@@ -112,7 +119,38 @@ public class login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnloginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnloginActionPerformed
-         
+    String username = txtusername.getText().trim();
+    String password = txtpassword.getText().trim();
+    
+    if (username.isEmpty() || password.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Username dan Password tidak boleh kosong.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    String query = "SELECT * FROM pengguna WHERE namaPengguna = ? AND kataSandi = ?";
+
+    try (Connection con = DatabaseConnection_mdg.connect();
+         PreparedStatement stmt = con.prepareStatement(query)) {
+        
+        stmt.setString(1, username);
+        stmt.setString(2, password); // Bandingkan langsung password tanpa hashing
+
+        ResultSet rs = stmt.executeQuery();
+
+        if (rs.next()) {
+            JOptionPane.showMessageDialog(this, "Login berhasil!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+            // Membuka HomePage_mdg dengan data guru
+            HomePage_mdg homePage = new HomePage_mdg();
+            homePage.setVisible(true);
+            this.dispose(); // Menutup login form
+        } else {
+            JOptionPane.showMessageDialog(this, "Username atau Password salah.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(this, "Terjadi kesalahan pada database: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
     }//GEN-LAST:event_btnloginActionPerformed
 
     /**
@@ -143,12 +181,12 @@ public class login extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new login().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new Register().setVisible(true);  // Menampilkan tampilan Login
         });
     }
+
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnlogin;

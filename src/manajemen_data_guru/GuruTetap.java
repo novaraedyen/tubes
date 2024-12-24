@@ -14,9 +14,9 @@ public class GuruTetap extends Guru {
     private double tunjangan;
 
     // Constructor
-    public GuruTetap(int idGuru, String namaDepan, String namaBelakang, String tanggalLahir, String jenisKelamin, 
+    public GuruTetap(String nama, String tanggalLahir, String jenisKelamin, String statusGuru, String mataPelajaran, int idGuru, 
                      double gajiPokok, String golongan, double tunjangan) {
-        super(idGuru, namaDepan, namaBelakang, tanggalLahir, jenisKelamin); // memanggil constructor superclass
+        super(nama, tanggalLahir, jenisKelamin, statusGuru, mataPelajaran, idGuru); // memanggil constructor superclass
         this.gajiPokok = gajiPokok;
         this.golongan = golongan;
         this.tunjangan = tunjangan;

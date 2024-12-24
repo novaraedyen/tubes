@@ -4,6 +4,10 @@
  */
 package manajemen_data_guru;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
 /**
  *
  * @author lenov
@@ -38,9 +42,9 @@ public class Register extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         txtusername_register = new javax.swing.JTextField();
         txtpassword_register = new javax.swing.JTextField();
-        btntambah_register = new javax.swing.JButton();
-        jLabel7 = new javax.swing.JLabel();
         btnregister = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        btnLogin = new javax.swing.JButton();
         cmbrole = new javax.swing.JComboBox<>();
 
         jLabel6.setText("jLabel6");
@@ -78,15 +82,6 @@ public class Register extends javax.swing.JFrame {
             }
         });
 
-        btntambah_register.setText("Tambah");
-        btntambah_register.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btntambah_registerActionPerformed(evt);
-            }
-        });
-
-        jLabel7.setText("Sudah punya akun?");
-
         btnregister.setText("Register");
         btnregister.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -94,7 +89,21 @@ public class Register extends javax.swing.JFrame {
             }
         });
 
-        cmbrole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jLabel7.setText("Sudah punya akun?");
+
+        btnLogin.setText("Login");
+        btnLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoginActionPerformed(evt);
+            }
+        });
+
+        cmbrole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Admin", "Guru" }));
+        cmbrole.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbroleActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -108,7 +117,7 @@ public class Register extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(51, 51, 51)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btntambah_register, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnregister, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -123,7 +132,7 @@ public class Register extends javax.swing.JFrame {
                                     .addComponent(txtpassword_register)
                                     .addComponent(txtusername_register)
                                     .addComponent(cmbrole, 0, 265, Short.MAX_VALUE)))
-                            .addComponent(btnregister, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(59, 59, 59)
@@ -132,7 +141,7 @@ public class Register extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addGap(266, 266, 266))
+                .addGap(225, 225, 225))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -154,11 +163,11 @@ public class Register extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel5)
                 .addGap(8, 8, 8)
-                .addComponent(btntambah_register)
+                .addComponent(btnregister)
                 .addGap(24, 24, 24)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnregister)
+                .addComponent(btnLogin)
                 .addContainerGap(59, Short.MAX_VALUE))
         );
 
@@ -176,9 +185,37 @@ public class Register extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btntambah_registerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btntambah_registerActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btntambah_registerActionPerformed
+    private void btnregisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnregisterActionPerformed
+        // Logic for registration button, validate input fields
+        String username = txtusername_register.getText();
+        String password = txtpassword_register.getText();
+        String role = cmbrole.getSelectedItem().toString();
+
+        if (username.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Username atau Password tidak boleh kosong", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try (Connection conn = DatabaseConnection_mdg.connect()) {  // Menggunakan koneksi dari kelas DatabaseConnection
+            String query = "INSERT INTO pengguna (namaPengguna, kataSandi, peran) VALUES (?, ?, ?)";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+                pstmt.setString(1, username);
+                pstmt.setString(2, password);  // Password disimpan dalam bentuk plaintext
+                pstmt.setString(3, role);
+                
+                int rowsAffected = pstmt.executeUpdate();
+                if (rowsAffected > 0) {
+                    JOptionPane.showMessageDialog(this, "Registrasi berhasil!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Registrasi gagal.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Terjadi kesalahan: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    
+    }//GEN-LAST:event_btnregisterActionPerformed
 
     private void txtusername_registerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtusername_registerActionPerformed
         // TODO add your handling code here:
@@ -188,13 +225,19 @@ public class Register extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtpassword_registerActionPerformed
 
-    private void btnregisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnregisterActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnregisterActionPerformed
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+    // Menutup tampilan Register dan membuka Login
+    this.dispose(); // Tutup form Register
+    new login().setVisible(true);  // Ganti dengan class Login Anda
+    }//GEN-LAST:event_btnLoginActionPerformed
 
     private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField3ActionPerformed
+
+    private void cmbroleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbroleActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbroleActionPerformed
 
     /**
      * @param args the command line arguments
@@ -232,8 +275,8 @@ public class Register extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnLogin;
     private javax.swing.JButton btnregister;
-    private javax.swing.JButton btntambah_register;
     private javax.swing.JComboBox<String> cmbrole;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

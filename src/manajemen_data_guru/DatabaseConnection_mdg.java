@@ -14,8 +14,13 @@ public class DatabaseConnection_mdg {
     private static final String USER="root";
     private static final String PASSWORD="";
     
-    public static Connection getConnection() throws SQLException{
-        return DriverManager.getConnection(URL, USER, PASSWORD);
+    public static Connection connect() throws SQLException {
+        // Mengembalikan koneksi ke database
+        try {
+            return DriverManager.getConnection(URL, USER, PASSWORD);
+        } catch (SQLException e) {
+            throw new SQLException("Koneksi ke database gagal: " + e.getMessage());
+        }
     }
 }
     

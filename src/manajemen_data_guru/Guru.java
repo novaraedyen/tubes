@@ -9,30 +9,27 @@ package manajemen_data_guru;
  * @author lenov
  */
 public class Guru {
-    private int idGuru;
-    private String namaDepan;
-    private String namaBelakang;
+    private String nama;
     private String tanggalLahir;
     private String jenisKelamin;
+    private String statusGuru;
+    private String mataPelajaran;
+    private int idGuru;
 
     // Constructor
-    public Guru(int idGuru, String namaDepan, String namaBelakang, String tanggalLahir, String jenisKelamin) {
-        this.idGuru = idGuru;
-        this.namaDepan = namaDepan;
-        this.namaBelakang = namaBelakang;
+    public Guru(String nama, String tanggalLahir, String jenisKelamin, String statusGuru, String mataPelajaran, int idGuru) {
+        this.nama = nama;
         this.tanggalLahir = tanggalLahir;
         this.jenisKelamin = jenisKelamin;
+        this.statusGuru   = statusGuru;
+        this.mataPelajaran= mataPelajaran;
+        this.idGuru = idGuru;
     }
 
+
     // Getter 
-    public int getIdGuru() {
-        return idGuru; 
-    }
-    public String getNamaDepan() {
-        return namaDepan; 
-    }
-    public String getNamaBelakang() {
-        return namaBelakang; 
+    public String getNama() {
+        return nama;
     }
     public String getTanggalLahir() {
         return tanggalLahir; 
@@ -40,22 +37,34 @@ public class Guru {
     public String getJenisKelamin() {
         return jenisKelamin; 
     }
+    public String getStatusGuru() {
+        return statusGuru;
+    }
+    public String getMataPelajaran() {
+        return mataPelajaran;
+    }
+    public int getIdGuru() {
+        return idGuru; 
+    }
     
     //Setter
-    public void setIdGuru(int idGuru) {
-        this.idGuru = idGuru; 
-    }
-    public void setNamaDepan(String namaDepan) {
-        this.namaDepan = namaDepan; 
-    }
-    public void setNamaBelakang(String namaBelakang) {
-        this.namaBelakang = namaBelakang; 
+    public void setNamaString (String nama) {
+        this.nama = nama; 
     }
     public void setTanggalLahir(String tanggalLahir) {
         this.tanggalLahir = tanggalLahir; 
     }
     public void setJenisKelamin(String jenisKelamin) {
         this.jenisKelamin = jenisKelamin; 
+    }
+    public void setStatusGuru(String statusGuru) {
+        this.statusGuru = statusGuru;
+    }
+    public void setMataPelajaran(String mataPelajaran) {
+        this.mataPelajaran = mataPelajaran;
+    }
+    public void setIdGuru(int idGuru) {
+        this.idGuru = idGuru; 
     }
     
 }
