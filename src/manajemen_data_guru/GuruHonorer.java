@@ -13,7 +13,7 @@ public class GuruHonorer extends Guru {
     private int jamMengajarPerMinggu;
 
     // Constructor
-    public GuruHonorer(String nama, String tanggalLahir, String jenisKelamin, String statusGuru, String mataPelajaran, int idGuru, 
+    public GuruHonorer(String nama, String tanggalLahir, String jenisKelamin, String mataPelajaran, String statusGuru, int idGuru, 
                        double tarifPerJam, int jamMengajarPerMinggu) {
         super(nama, tanggalLahir, jenisKelamin, statusGuru, mataPelajaran, idGuru); // memanggil constructor superclass
         this.tarifPerJam = tarifPerJam;

@@ -6,6 +6,11 @@ package manajemen_data_guru;
 
 import javax.swing.*;
 import java.awt.Color;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+
 
 /**
  *
@@ -13,8 +18,9 @@ import java.awt.Color;
  */
 public class tambahguru extends javax.swing.JFrame {
     private HomePage_mdg homePage;
-     
-     
+    
+
+
     /**
      * Creates new form tambahguru
      */
@@ -24,39 +30,64 @@ public class tambahguru extends javax.swing.JFrame {
         setLocationRelativeTo(null); // Menempatkan form di tengah layar
 }
     
-private void tambahGuru() {
- try {
-        String nama = txtnama.getText();
-        String tanggalLahir = txttgllahir.getText();
-        String jenisKelamin = (String) cmbjeniskelamin.getSelectedItem();
-        String statusGuru = (String) cmbstatusguru.getSelectedItem();
-        String mataPelajaran = txtmapel.getText();
-        int idGuru = Integer.parseInt(txtidguru.getText());
+    public tambahguru(HomePage_mdg homePage, int rowIndex, Object[] rowData) {
+        initComponents();
+        this.homePage = homePage; // Menyimpan referensi ke HomePage_mdg
 
-        // Validasi input
-        if (nama.isEmpty() || tanggalLahir.isEmpty() || mataPelajaran.isEmpty()) {
-            lblketerangan.setText("Semua field harus diisi!");
-            lblketerangan.setForeground(Color.RED);
-            return;
-        }
-
-        // Menambahkan data ke tabel HomePage_mdg
-        homePage.addGuruToTable(nama, tanggalLahir, jenisKelamin, statusGuru, mataPelajaran, idGuru);
-
-        // Tutup form TambahGuru
-        JOptionPane.showMessageDialog(this, "Data berhasil ditambahkan!", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
-        this.dispose();
-
-    } catch (NumberFormatException e) {
-        lblketerangan.setText("ID Guru harus berupa angka!");
-        lblketerangan.setForeground(Color.RED);
-    } catch (Exception e) {
-        lblketerangan.setText("Terjadi kesalahan, cek data!");
-        lblketerangan.setForeground(Color.RED);
     }
-}
+    
+    private void tambahGuru() {
+        try {
+               String nama = txtnama.getText();
+               String tanggalLahir = txttgllahir.getText();
+               String jenisKelamin = (String) cmbjeniskelamin.getSelectedItem();
+               String mataPelajaran = txtmapel.getText();
+               String statusGuru = (String) cmbstatusguru.getSelectedItem();
+               int idGuru = Integer.parseInt(txtidguru.getText());
 
-        
+
+               // Validasi input
+               if (nama.isEmpty() || tanggalLahir.isEmpty() || mataPelajaran.isEmpty()) {
+                   lblketerangan.setText("Semua field harus diisi!");
+                   lblketerangan.setForeground(Color.RED);
+                   return;
+               }
+               
+            /*Connection conn = DatabaseConnection_mdg.connect();  // Menggunakan koneksi dari kelas DatabaseConnection
+            String query = "INSERT INTO guru (nama, tanggalLahir, jenisKelamin, mataPelajaran, statusGuru, idGuru) VALUES (?, ?, ?, ?, ?, ?)";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+                pstmt.setString(1, nama);  // Password disimpan dalam bentuk plaintext
+                pstmt.setString(2, tanggalLahir);
+                pstmt.setString(3, jenisKelamin);
+                pstmt.setString(4, mataPelajaran);
+                pstmt.setString(5, statusGuru);
+                pstmt.setInt(0, idGuru);
+                
+                int rowsAffected = pstmt.executeUpdate();
+               }*/
+            
+               // Menambahkan data ke tabel HomePage_mdg
+               homePage.addGuruToTable(nama, tanggalLahir, jenisKelamin, mataPelajaran, statusGuru, idGuru);
+
+               // Tutup form TambahGuru
+               // Membuka HomePage_mdg dengan data guru
+               JOptionPane.showMessageDialog(this, "Data berhasil ditambahkan!", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
+               this.dispose();
+               homePage.setVisible(true);
+
+               
+           } catch (NumberFormatException e) {
+               lblketerangan.setText("ID Guru harus berupa angka!");
+               lblketerangan.setForeground(Color.RED);
+           } catch (Exception e) {
+               lblketerangan.setText("Terjadi kesalahan, cek data!");
+               lblketerangan.setForeground(Color.RED);
+           }
+       }
+    
+    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -66,27 +97,33 @@ private void tambahGuru() {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jColorChooser1 = new javax.swing.JColorChooser();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        txtnama = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        txtnama = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        cmbjeniskelamin = new javax.swing.JComboBox<>();
+        txttgllahir = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        cmbstatusguru = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         txtmapel = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        btnsimpan = new javax.swing.JButton();
-        txtidguru = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        txttgllahir = new javax.swing.JTextField();
-        cmbjeniskelamin = new javax.swing.JComboBox<>();
+        txtidguru = new javax.swing.JTextField();
+        btnsimpan = new javax.swing.JButton();
         lblketerangan = new javax.swing.JLabel();
-        cmbstatusguru = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel1.setText("Aplikasi Management Data Guru");
+
+        jLabel2.setText("Nama Lengkap");
 
         txtnama.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -94,20 +131,35 @@ private void tambahGuru() {
             }
         });
 
-        jLabel2.setText("Nama Lengkap");
+        jLabel4.setText("Jenis Kelamin");
 
-        jLabel4.setText("Jenis kelamin");
+        jLabel8.setText("Tanggal Lahir");
 
-        jLabel5.setText("Mata pelajaran");
-
-        jLabel6.setText("Status guru");
-
-        btnsimpan.setText("Simpan");
-        btnsimpan.addActionListener(new java.awt.event.ActionListener() {
+        cmbjeniskelamin.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Laki-Laki", "Perempuan" }));
+        cmbjeniskelamin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnsimpanActionPerformed(evt);
+                cmbjeniskelaminActionPerformed(evt);
             }
         });
+
+        txttgllahir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txttgllahirActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setText("Status Guru");
+
+        cmbstatusguru.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tetap", "Honorer" }));
+        cmbstatusguru.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbstatusguruActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setText("Mata Pelajaran");
+
+        jLabel7.setText("ID Guru");
 
         txtidguru.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -115,96 +167,86 @@ private void tambahGuru() {
             }
         });
 
-        jLabel7.setText("ID Guru");
-
-        jLabel8.setText("Tanggal Lahir");
-
-        cmbjeniskelamin.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cmbjeniskelamin.addActionListener(new java.awt.event.ActionListener() {
+        btnsimpan.setBackground(new java.awt.Color(0, 0, 204));
+        btnsimpan.setForeground(new java.awt.Color(255, 255, 255));
+        btnsimpan.setText("Simpan");
+        btnsimpan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbjeniskelaminActionPerformed(evt);
+                btnsimpanActionPerformed(evt);
             }
         });
 
         lblketerangan.setText("Keterangan");
 
-        cmbstatusguru.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cmbstatusguru.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbstatusguruActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(155, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(169, 169, 169))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cmbstatusguru, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(btnsimpan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(txtnama)
-                                        .addComponent(jLabel2)
-                                        .addComponent(jLabel4)
-                                        .addComponent(cmbjeniskelamin, 0, 113, Short.MAX_VALUE))
-                                    .addGap(60, 60, 60)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel8)
-                                        .addComponent(txttgllahir, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addComponent(txtmapel, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(txtidguru, javax.swing.GroupLayout.Alignment.LEADING)))
-                        .addGap(149, 149, 149))))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(39, 39, 39)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(29, 29, 29)
                 .addComponent(lblketerangan)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6)
+                    .addComponent(cmbstatusguru, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtmapel, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel7)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(jLabel1))
+                    .addComponent(jLabel5)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(txtidguru, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(btnsimpan, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(txtnama, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jLabel8)
+                                    .addGap(0, 0, Short.MAX_VALUE))
+                                .addComponent(txttgllahir))
+                            .addGap(18, 18, 18)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel4)
+                                .addComponent(cmbjeniskelamin, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(142, 142, 142))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
+                .addGap(33, 33, 33)
                 .addComponent(jLabel1)
-                .addGap(30, 30, 30)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtnama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(36, 36, 36)
+                .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtidguru, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtnama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel8))
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txttgllahir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmbjeniskelamin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(cmbstatusguru, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(11, 11, 11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                 .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                 .addComponent(txtmapel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel7)
+                .addGap(21, 21, 21)
+                .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtidguru, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(22, 22, 22)
+                .addComponent(cmbstatusguru, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(46, 46, 46)
                 .addComponent(btnsimpan)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                .addGap(27, 27, 27)
                 .addComponent(lblketerangan)
-                .addGap(23, 23, 23))
+                .addGap(17, 17, 17))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -215,31 +257,37 @@ private void tambahGuru() {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnsimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsimpanActionPerformed
-     tambahGuru(); // Memanggil method untuk menambahkan data
-    }//GEN-LAST:event_btnsimpanActionPerformed
 
     private void txtnamaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtnamaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtnamaActionPerformed
 
+    private void cmbjeniskelaminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbjeniskelaminActionPerformed
+
+    }//GEN-LAST:event_cmbjeniskelaminActionPerformed
+
+    private void cmbstatusguruActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbstatusguruActionPerformed
+
+    }//GEN-LAST:event_cmbstatusguruActionPerformed
+
     private void txtidguruActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtidguruActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtidguruActionPerformed
 
-    private void cmbjeniskelaminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbjeniskelaminActionPerformed
-    cmbjeniskelamin.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Laki-Laki", "Perempuan" }));
-    }//GEN-LAST:event_cmbjeniskelaminActionPerformed
+    private void txttgllahirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txttgllahirActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txttgllahirActionPerformed
 
-    private void cmbstatusguruActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbstatusguruActionPerformed
-    cmbstatusguru.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tetap", "Honorer" }));
-    }//GEN-LAST:event_cmbstatusguruActionPerformed
+    private void btnsimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsimpanActionPerformed
+        
+        tambahGuru(); // Memanggil method untuk menambahkan data
+    }//GEN-LAST:event_btnsimpanActionPerformed
 
     /**
      * @param args the command line arguments
@@ -269,7 +317,7 @@ private void tambahGuru() {
         //</editor-fold>
 
         /* Create and display the form */
-    java.awt.EventQueue.invokeLater(new Runnable() {
+        java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new tambahguru(new HomePage_mdg()).setVisible(true);
             }
@@ -280,6 +328,7 @@ private void tambahGuru() {
     private javax.swing.JButton btnsimpan;
     private javax.swing.JComboBox<String> cmbjeniskelamin;
     private javax.swing.JComboBox<String> cmbstatusguru;
+    private javax.swing.JColorChooser jColorChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;

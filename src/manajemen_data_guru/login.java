@@ -42,6 +42,7 @@ public class login extends javax.swing.JFrame {
         btnlogin = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jLabel1.setForeground(new java.awt.Color(153, 153, 153));
         jLabel1.setText("Password");
@@ -52,6 +53,8 @@ public class login extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel3.setText("Login to your account");
 
+        btnlogin.setBackground(new java.awt.Color(51, 51, 255));
+        btnlogin.setForeground(new java.awt.Color(255, 255, 255));
         btnlogin.setText("Login");
         btnlogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -116,6 +119,7 @@ public class login extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnloginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnloginActionPerformed
@@ -182,7 +186,7 @@ public class login extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            new Register().setVisible(true);  // Menampilkan tampilan Login
+            new register_mdg().setVisible(true);  // Menampilkan tampilan Register
         });
     }
 

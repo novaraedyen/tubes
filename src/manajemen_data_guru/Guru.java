@@ -12,18 +12,18 @@ public class Guru {
     private String nama;
     private String tanggalLahir;
     private String jenisKelamin;
-    private String statusGuru;
     private String mataPelajaran;
+    private String statusGuru;
     private int idGuru;
 
     // Constructor
-    public Guru(String nama, String tanggalLahir, String jenisKelamin, String statusGuru, String mataPelajaran, int idGuru) {
+    public Guru(String nama, String tanggalLahir, String jenisKelamin, String mataPelajaran, String statusGuru, int idGuru) {
         this.nama = nama;
         this.tanggalLahir = tanggalLahir;
         this.jenisKelamin = jenisKelamin;
-        this.statusGuru   = statusGuru;
         this.mataPelajaran= mataPelajaran;
-        this.idGuru = idGuru;
+        this.statusGuru   = statusGuru;
+       this.idGuru = idGuru;
     }
 
 
