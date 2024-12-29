@@ -14,16 +14,16 @@ public class Guru {
     private String jenisKelamin;
     private String mataPelajaran;
     private String statusGuru;
-    private int idGuru;
+    private String idGuru;
 
     // Constructor
-    public Guru(String nama, String tanggalLahir, String jenisKelamin, String mataPelajaran, String statusGuru, int idGuru) {
+    public Guru(String nama, String tanggalLahir, String jenisKelamin, String mataPelajaran, String statusGuru, String idGuru) {
         this.nama = nama;
         this.tanggalLahir = tanggalLahir;
         this.jenisKelamin = jenisKelamin;
         this.mataPelajaran= mataPelajaran;
         this.statusGuru   = statusGuru;
-       this.idGuru = idGuru;
+        this.idGuru = idGuru;
     }
 
 
@@ -43,7 +43,7 @@ public class Guru {
     public String getMataPelajaran() {
         return mataPelajaran;
     }
-    public int getIdGuru() {
+    public String getIdGuru() {
         return idGuru; 
     }
     
@@ -63,7 +63,7 @@ public class Guru {
     public void setMataPelajaran(String mataPelajaran) {
         this.mataPelajaran = mataPelajaran;
     }
-    public void setIdGuru(int idGuru) {
+    public void setIdGuru(String idGuru) {
         this.idGuru = idGuru; 
     }
     

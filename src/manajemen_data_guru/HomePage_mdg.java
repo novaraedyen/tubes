@@ -6,42 +6,62 @@ package manajemen_data_guru;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.sql.*;
 
 /**
  *
  * @author lenov
  */
 public class HomePage_mdg extends javax.swing.JFrame {
-    private DefaultTableModel model;
+
     /**
      * Creates new form HomePage
      */
     public HomePage_mdg() {
         initComponents();
+        updateTabelGuru();
     }
     
-    private void initTable() {
-    tbldaftarguru.setModel(new DefaultTableModel(
-        new Object[][]{}, // Data awal kosong
-        new String[] { "Nama Lengkap", "Jenis Kelamin", "Tanggal Lahir", "Status Guru", "Mata Pelajaran", "ID Guru" }
-    ));
-}
- 
-    // Metode ini digunakan untuk menambahkan data ke tabel
-    public void addGuruToTable(String nama, String tanggalLahir, String jenisKelamin, String statusGuru, String mataPelajaran, int idGuru) {
-    // Model tabel (default harus disiapkan sebelumnya)
-    DefaultTableModel model = (DefaultTableModel) tbldaftarguru.getModel();
+    // Method untuk memperbarui tabel guru setelah data baru ditambahkan
+    public void updateTabelGuru() {
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        DefaultTableModel model = (DefaultTableModel) tbldaftarguru.getModel();
 
-    // Menambahkan baris baru
-    Object[] row = { nama, jenisKelamin, tanggalLahir, statusGuru, mataPelajaran, idGuru };
-    model.addRow(row);
+    try {
+        conn = DatabaseConnection_mdg.connect(); // Menggunakan koneksi dari DatabaseConnection_mdg
+        stmt = conn.createStatement();
+        String sql = "SELECT * FROM guru";
+        rs = stmt.executeQuery(sql);
+
+        // Mengosongkan tabel sebelum menambahkan data baru
+        model.setRowCount(0);
+
+        // Menambahkan data ke tabel
+        while (rs.next()) {
+            String idGuru = rs.getString("idGuru");
+            String nama = rs.getString("nama");
+            String tanggalLahir = rs.getString("tanggalLahir");
+            String jenisKelamin = rs.getString("jenisKelamin");
+            String mataPelajaran = rs.getString("mataPelajaran");
+            String statusGuru = rs.getString("statusGuru"); // Tambahkan status guru jika diperlukan
+
+            model.addRow(new Object[]{idGuru, nama, tanggalLahir, jenisKelamin, mataPelajaran, statusGuru});
+        }
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+    } finally {
+        try {
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
-    
-    
     /**
      * Creates new form HomePage_mdg
      */
@@ -65,6 +85,7 @@ public class HomePage_mdg extends javax.swing.JFrame {
         btnkeluar = new javax.swing.JButton();
         btnupdate = new javax.swing.JButton();
         btnhapus = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -78,12 +99,15 @@ public class HomePage_mdg extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 204, 204));
         setResizable(false);
+
+        jPanel1.setBackground(new java.awt.Color(243, 249, 249));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel1.setText("Aplikasi Manajemen Data Guru");
 
-        btntbhguru.setBackground(new java.awt.Color(51, 51, 255));
+        btntbhguru.setBackground(new java.awt.Color(0, 153, 51));
         btntbhguru.setForeground(new java.awt.Color(255, 255, 255));
         btntbhguru.setText(" Tambah Guru");
         btntbhguru.addActionListener(new java.awt.event.ActionListener() {
@@ -104,18 +128,18 @@ public class HomePage_mdg extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btntbhguru)
-                .addGap(25, 25, 25))
+                .addGap(29, 29, 29))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addGap(322, 322, 322))
+                .addGap(318, 318, 318))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(26, 26, 26)
+                .addGap(30, 30, 30)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btntbhguru)
                     .addComponent(jLabel2)))
@@ -126,11 +150,13 @@ public class HomePage_mdg extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Nama Lengkap", "Jenis Kelamin", "Tanggal Lahir", "Status Guru", "Mata Pelajaran", "ID Guru"
+                "ID Guru", "Nama Lengkap", "Tanggal Lahir", "Jenis Kelamin", "Mata Pelajaran", "Status Guru"
             }
         ));
         jScrollPane1.setViewportView(tbldaftarguru);
 
+        btnkeluar.setBackground(new java.awt.Color(204, 0, 0));
+        btnkeluar.setForeground(new java.awt.Color(255, 255, 255));
         btnkeluar.setText("Keluar");
         btnkeluar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -147,7 +173,7 @@ public class HomePage_mdg extends javax.swing.JFrame {
             }
         });
 
-        btnhapus.setBackground(new java.awt.Color(255, 51, 51));
+        btnhapus.setBackground(new java.awt.Color(204, 0, 0));
         btnhapus.setForeground(new java.awt.Color(255, 255, 255));
         btnhapus.setText("Hapus");
         btnhapus.addActionListener(new java.awt.event.ActionListener() {
@@ -156,13 +182,26 @@ public class HomePage_mdg extends javax.swing.JFrame {
             }
         });
 
+        jPanel4.setBackground(new java.awt.Color(243, 249, 249));
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 905, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 451, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(24, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 29, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnkeluar)
@@ -171,7 +210,9 @@ public class HomePage_mdg extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnhapus))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 847, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(22, 22, 22))
+                .addGap(29, 29, 29))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -185,6 +226,8 @@ public class HomePage_mdg extends javax.swing.JFrame {
                     .addComponent(btnupdate)
                     .addComponent(btnhapus))
                 .addGap(0, 41, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -192,112 +235,124 @@ public class HomePage_mdg extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btntbhguruActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btntbhguruActionPerformed
-        this.dispose(); // Tutup form 
-        tambahguru formTambahGuru = new tambahguru(this);
-        formTambahGuru.setVisible(true);  // Menampilkan form untuk tambah guru
+        // Membuka form tambah guru
+        new tambahguru(this).setVisible(true);
+        updateTabelGuru();
+        this.dispose();
     }//GEN-LAST:event_btntbhguruActionPerformed
 
     private void btnkeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnkeluarActionPerformed
-        this.dispose(); // Tutup form 
-        new register_mdg().setVisible(true);  // Menampilkan form untuk tambah guru
+        this.dispose(); // tutup form 
+        new register_mdg().setVisible(true);  // menampilkan form register
     }//GEN-LAST:event_btnkeluarActionPerformed
 
     private void btnupdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnupdateActionPerformed
-  int selectedRow = tbldaftarguru.getSelectedRow();
-    if (selectedRow != -1) {
-        DefaultTableModel model = (DefaultTableModel) tbldaftarguru.getModel();
-        
-        // Ambil data lama dari baris yang dipilih
-        String nama = model.getValueAt(selectedRow, 0).toString();
-        String jenisKelamin = model.getValueAt(selectedRow, 1).toString();
-        String tanggalLahir = model.getValueAt(selectedRow, 2).toString();
-        String statusGuru = model.getValueAt(selectedRow, 3).toString();
-        String mataPelajaran = model.getValueAt(selectedRow, 4).toString();
-        String idGuru = model.getValueAt(selectedRow, 5).toString();
-        
-        // Tampilkan form dialog untuk mengedit
-        JTextField txtNama = new JTextField(nama);
-        JTextField txtJenisKelamin = new JTextField(jenisKelamin);
-        JTextField txtTanggalLahir = new JTextField(tanggalLahir);
-        JTextField txtStatusGuru = new JTextField(statusGuru);
-        JTextField txtMataPelajaran = new JTextField(mataPelajaran);
-        JTextField txtIdGuru = new JTextField(idGuru);
+        int selectedRow = tbldaftarguru.getSelectedRow();
+        if (selectedRow != -1) {
+            DefaultTableModel model = (DefaultTableModel) tbldaftarguru.getModel();
 
-        Object[] message = {
-            "Nama Lengkap:", txtNama,
-            "Jenis Kelamin:", txtJenisKelamin,
-            "Tanggal Lahir:", txtTanggalLahir,
-            "Status Guru:", txtStatusGuru,
-            "Mata Pelajaran:", txtMataPelajaran,
-            "ID Guru:", txtIdGuru
-        };
+            // Ambil data lama dari baris yang dipilih
+            String idGuru = model.getValueAt(selectedRow, 0).toString();
+            String nama = model.getValueAt(selectedRow, 1).toString();
+            String tanggalLahir = model.getValueAt(selectedRow, 2).toString();
+            String jenisKelamin = model.getValueAt(selectedRow, 3).toString();
+            String mataPelajaran = model.getValueAt(selectedRow, 4).toString();
+            String statusGuru = model.getValueAt(selectedRow, 5).toString();
 
-        int option = JOptionPane.showConfirmDialog(this, message, "Edit Data Guru", JOptionPane.OK_CANCEL_OPTION);
-        if (option == JOptionPane.OK_OPTION) {
-            // Perbarui data di tabel
-            model.setValueAt(txtNama.getText(), selectedRow, 0);
-            model.setValueAt(txtJenisKelamin.getText(), selectedRow, 1);
-            model.setValueAt(txtTanggalLahir.getText(), selectedRow, 2);
-            model.setValueAt(txtStatusGuru.getText(), selectedRow, 3);
-            model.setValueAt(txtMataPelajaran.getText(), selectedRow, 4);
-            model.setValueAt(txtIdGuru.getText(), selectedRow, 5);
+            JTextField txtIdGuru = new JTextField(idGuru);
+            JTextField txtNama = new JTextField(nama);
+            JTextField txtTanggalLahir = new JTextField(tanggalLahir);
+            JTextField txtJenisKelamin = new JTextField(jenisKelamin);
+            JTextField txtMataPelajaran = new JTextField(mataPelajaran);
+            JTextField txtStatusGuru = new JTextField(statusGuru);
 
-            JOptionPane.showMessageDialog(this, "Data berhasil diperbarui!");
+            Object[] message = {
+                "ID Guru:", txtIdGuru,
+                "Nama Lengkap:", txtNama,
+                "Tanggal Lahir:", txtTanggalLahir,
+                "Jenis Kelamin:", txtJenisKelamin,
+                "Mata Pelajaran:", txtMataPelajaran,
+                "Status Guru:", txtStatusGuru
+            };
+
+            int option = JOptionPane.showConfirmDialog(this, message, "Edit Data Guru", JOptionPane.OK_CANCEL_OPTION);
+            if (option == JOptionPane.OK_OPTION) {
+                model.setValueAt(txtNama.getText(), selectedRow, 1);
+                model.setValueAt(txtTanggalLahir.getText(), selectedRow, 2);
+                model.setValueAt(txtJenisKelamin.getText(), selectedRow, 3);
+                model.setValueAt(txtMataPelajaran.getText(), selectedRow, 4);
+                model.setValueAt(txtStatusGuru.getText(), selectedRow, 5);
+
+                // Update di database
+                try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/manajemen_data_guru", "root", "")) {
+                    String query = "UPDATE guru SET nama = ?, tanggalLahir = ?, jenisKelamin = ?, mataPelajaran = ?, statusGuru = ? WHERE idGuru = ?";
+                    PreparedStatement pst = conn.prepareStatement(query);
+                    pst.setString(1, txtNama.getText());
+                    pst.setString(2, txtTanggalLahir.getText());
+                    pst.setString(3, txtJenisKelamin.getText());
+                    pst.setString(4, txtMataPelajaran.getText());
+                    pst.setString(5, txtStatusGuru.getText());
+                    pst.setString(6, txtIdGuru.getText());
+                    
+                    pst.executeUpdate();
+                    
+                // Menampilkan pesan bahwa update berhasil
+                JOptionPane.showMessageDialog(this, "Data berhasil diperbarui!");
+
+                // Perbarui tabel setelah data diupdate
+                updateTabelGuru();
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Pilih baris yang akan diedit!");
         }
-    } else {
-        JOptionPane.showMessageDialog(this, "Pilih baris yang akan diedit!");
-    }
-
 
     }//GEN-LAST:event_btnupdateActionPerformed
 
     private void btnhapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnhapusActionPerformed
     int selectedRow = tbldaftarguru.getSelectedRow();
-        if (selectedRow != -1) {
-            DefaultTableModel model = (DefaultTableModel) tbldaftarguru.getModel();
-            model.removeRow(selectedRow);
-            JOptionPane.showMessageDialog(this, "Data berhasil dihapus!");
-        } else {
-            JOptionPane.showMessageDialog(this, "Pilih baris yang akan dihapus!");
-        }
+         if (selectedRow != -1) {
+         DefaultTableModel model = (DefaultTableModel) tbldaftarguru.getModel();
+         String idGuru = model.getValueAt(selectedRow, 0).toString();
+
+         int confirm = JOptionPane.showConfirmDialog(this, "Apakah Anda yakin ingin menghapus data ini?", "Hapus Data", JOptionPane.YES_NO_OPTION);
+         if (confirm == JOptionPane.YES_OPTION) {
+             try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/manajemen_data_guru", "root", "")) {
+                 String query = "DELETE FROM guru WHERE idGuru = ?";
+                 PreparedStatement pst = conn.prepareStatement(query);
+                 pst.setString(1, idGuru);
+                 int affectedRows = pst.executeUpdate();
+
+                 if (affectedRows > 0) {
+                     // Menghapus data pada tabel secara langsung
+                     model.removeRow(selectedRow);
+
+                     // Menampilkan pesan bahwa hapus berhasil
+                     JOptionPane.showMessageDialog(this, "Data berhasil dihapus!");
+
+                     // Perbarui tabel setelah data dihapus
+                     updateTabelGuru();
+                 } else {
+                     JOptionPane.showMessageDialog(this, "Data gagal dihapus.");
+                 }
+                 
+             } catch (SQLException e) {
+                 JOptionPane.showMessageDialog(this, "Gagal menghapus data: " + e.getMessage());
+             }
+         }
+     } else {
+         JOptionPane.showMessageDialog(this, "Pilih baris yang akan dihapus!");
+     }
+
 
     }//GEN-LAST:event_btnhapusActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(HomePage_mdg.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(HomePage_mdg.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(HomePage_mdg.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(HomePage_mdg.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new HomePage_mdg().setVisible(true);
-            }
-        });
-    }
-
+   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnhapus;
     private javax.swing.JButton btnkeluar;
@@ -307,6 +362,7 @@ public class HomePage_mdg extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tbldaftarguru;
     // End of variables declaration//GEN-END:variables

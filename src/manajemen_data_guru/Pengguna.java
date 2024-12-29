@@ -10,16 +10,16 @@ package manajemen_data_guru;
  */
 
 public class Pengguna {
-    private int idPengguna;
+    private String idPengguna;
     private String namaPengguna;
     private String kataSandi;
     private String peran;
-    private int idGuru;
+    private String idGuru;
 
 
     // Constructor dan Getter
 
-    public int getIdPengguna() {
+    public String getIdPengguna() {
         return idPengguna;
     }
 
@@ -35,12 +35,12 @@ public class Pengguna {
         return peran;
     }
 
-    public int getIdGuru() {
+    public String getIdGuru() {
         return idGuru;
     }
     
     //Setter
-    public void setIdPengguna(int idPengguna) {
+    public void setIdPengguna(String idPengguna) {
         this.idPengguna = idPengguna;
     }
 
@@ -56,7 +56,7 @@ public class Pengguna {
         this.peran = peran;
     }
 
-    public void setIdGuru(int idGuru) {
+    public void setIdGuru(String idGuru) {
         this.idGuru = idGuru;
     }
 }

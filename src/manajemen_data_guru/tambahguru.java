@@ -4,12 +4,10 @@
  */
 package manajemen_data_guru;
 
+import java.sql.*;
 import javax.swing.*;
-import java.awt.Color;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 
 
 /**
@@ -17,76 +15,59 @@ import java.sql.SQLException;
  * @author lenov
  */
 public class tambahguru extends javax.swing.JFrame {
-    private HomePage_mdg homePage;
     
+    private HomePage_mdg parent;
 
+    public tambahguru(HomePage_mdg parent) {
+        this.parent = parent;
+        initComponents();
+    }
+
+    public static void tambahDataGuru(String idGuru, String nama, String tanggalLahir, String jenisKelamin, String mataPelajaran, String statusGuru) {
+    
+    // Koneksi ke database melalui DatabaseConnection_mdg class
+        Connection conn = null;
+        PreparedStatement stmtGuru = null;
 
     /**
      * Creates new form tambahguru
      */
-    public tambahguru(HomePage_mdg homePage) {
-        initComponents();
-        this.homePage = homePage; // Menyimpan referensi ke HomePage_mdg
-        setLocationRelativeTo(null); // Menempatkan form di tengah layar
-}
-    
-    public tambahguru(HomePage_mdg homePage, int rowIndex, Object[] rowData) {
-        initComponents();
-        this.homePage = homePage; // Menyimpan referensi ke HomePage_mdg
+    try {
+            // Menggunakan koneksi dari DatabaseConnection_mdg
+            conn = DatabaseConnection_mdg.connect();  // Replace `getConnection` with `connect()`
 
+            // Validasi input format tanggal
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            sdf.parse(tanggalLahir);
+
+            // Query untuk memasukkan data ke tabel guru
+            String queryGuru = "INSERT INTO guru (idGuru, nama, tanggalLahir, jenisKelamin, mataPelajaran, statusGuru) "
+                               + "VALUES (?, ?, ?, ?, ?, ?)";
+
+            stmtGuru = conn.prepareStatement(queryGuru);
+            stmtGuru.setString(1, idGuru);
+            stmtGuru.setString(2, nama);
+            stmtGuru.setString(3, tanggalLahir);
+            stmtGuru.setString(4, jenisKelamin);
+            stmtGuru.setString(5, mataPelajaran);
+            stmtGuru.setString(6, statusGuru); // Store statusGuru directly in the `guru` table
+            stmtGuru.executeUpdate();
+
+            JOptionPane.showMessageDialog(null, "Data berhasil ditambahkan!");
+
+        } catch (ParseException e) {
+            JOptionPane.showMessageDialog(null, "Format tanggal salah! Gunakan format YYYY-MM-DD.");
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+        } finally {
+            try {
+                if (stmtGuru != null) stmtGuru.close();
+                if (conn != null) conn.close();  // Ensure connection is properly closed
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
-    
-    private void tambahGuru() {
-        try {
-               String nama = txtnama.getText();
-               String tanggalLahir = txttgllahir.getText();
-               String jenisKelamin = (String) cmbjeniskelamin.getSelectedItem();
-               String mataPelajaran = txtmapel.getText();
-               String statusGuru = (String) cmbstatusguru.getSelectedItem();
-               int idGuru = Integer.parseInt(txtidguru.getText());
-
-
-               // Validasi input
-               if (nama.isEmpty() || tanggalLahir.isEmpty() || mataPelajaran.isEmpty()) {
-                   lblketerangan.setText("Semua field harus diisi!");
-                   lblketerangan.setForeground(Color.RED);
-                   return;
-               }
-               
-            /*Connection conn = DatabaseConnection_mdg.connect();  // Menggunakan koneksi dari kelas DatabaseConnection
-            String query = "INSERT INTO guru (nama, tanggalLahir, jenisKelamin, mataPelajaran, statusGuru, idGuru) VALUES (?, ?, ?, ?, ?, ?)";
-
-            try (PreparedStatement pstmt = conn.prepareStatement(query)) {
-                pstmt.setString(1, nama);  // Password disimpan dalam bentuk plaintext
-                pstmt.setString(2, tanggalLahir);
-                pstmt.setString(3, jenisKelamin);
-                pstmt.setString(4, mataPelajaran);
-                pstmt.setString(5, statusGuru);
-                pstmt.setInt(0, idGuru);
-                
-                int rowsAffected = pstmt.executeUpdate();
-               }*/
-            
-               // Menambahkan data ke tabel HomePage_mdg
-               homePage.addGuruToTable(nama, tanggalLahir, jenisKelamin, mataPelajaran, statusGuru, idGuru);
-
-               // Tutup form TambahGuru
-               // Membuka HomePage_mdg dengan data guru
-               JOptionPane.showMessageDialog(this, "Data berhasil ditambahkan!", "Berhasil", JOptionPane.INFORMATION_MESSAGE);
-               this.dispose();
-               homePage.setVisible(true);
-
-               
-           } catch (NumberFormatException e) {
-               lblketerangan.setText("ID Guru harus berupa angka!");
-               lblketerangan.setForeground(Color.RED);
-           } catch (Exception e) {
-               lblketerangan.setText("Terjadi kesalahan, cek data!");
-               lblketerangan.setForeground(Color.RED);
-           }
-       }
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -113,7 +94,6 @@ public class tambahguru extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         txtidguru = new javax.swing.JTextField();
         btnsimpan = new javax.swing.JButton();
-        lblketerangan = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -167,7 +147,7 @@ public class tambahguru extends javax.swing.JFrame {
             }
         });
 
-        btnsimpan.setBackground(new java.awt.Color(0, 0, 204));
+        btnsimpan.setBackground(new java.awt.Color(0, 0, 255));
         btnsimpan.setForeground(new java.awt.Color(255, 255, 255));
         btnsimpan.setText("Simpan");
         btnsimpan.addActionListener(new java.awt.event.ActionListener() {
@@ -176,16 +156,12 @@ public class tambahguru extends javax.swing.JFrame {
             }
         });
 
-        lblketerangan.setText("Keterangan");
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addComponent(lblketerangan)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+                .addContainerGap(146, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6)
                     .addComponent(cmbstatusguru, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -244,9 +220,7 @@ public class tambahguru extends javax.swing.JFrame {
                 .addComponent(cmbstatusguru, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(46, 46, 46)
                 .addComponent(btnsimpan)
-                .addGap(27, 27, 27)
-                .addComponent(lblketerangan)
-                .addGap(17, 17, 17))
+                .addGap(60, 60, 60))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -285,44 +259,40 @@ public class tambahguru extends javax.swing.JFrame {
     }//GEN-LAST:event_txttgllahirActionPerformed
 
     private void btnsimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsimpanActionPerformed
-        
-        tambahGuru(); // Memanggil method untuk menambahkan data
+
+        // Ambil data dari form
+        String idGuru = txtidguru.getText();
+        String nama = txtnama.getText();
+        String tanggalLahir = txttgllahir.getText();
+        String jenisKelamin = (String) cmbjeniskelamin.getSelectedItem();
+        String mataPelajaran = txtmapel.getText();
+        String statusGuru = (String) cmbstatusguru.getSelectedItem();
+
+        // Validasi input data
+        if (idGuru.isEmpty() || nama.isEmpty() || tanggalLahir.isEmpty() || mataPelajaran.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Harap isi semua kolom!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            // Panggil metode untuk menambah data guru
+            tambahDataGuru(idGuru, nama, tanggalLahir, jenisKelamin, mataPelajaran, statusGuru);
+            
+            // Perbarui tabel di form utama
+            parent.updateTabelGuru(); // Pastikan HomePage_mdg memiliki method updateTabelGuru()
+
+            // Tutup form tambah guru
+            this.dispose();
+            new HomePage_mdg().setVisible(true);  // Ganti dengan class Login Anda
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Terjadi kesalahan: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
     }//GEN-LAST:event_btnsimpanActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(tambahguru.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(tambahguru.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(tambahguru.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(tambahguru.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new tambahguru(new HomePage_mdg()).setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnsimpan;
@@ -337,7 +307,6 @@ public class tambahguru extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JLabel lblketerangan;
     private javax.swing.JTextField txtidguru;
     private javax.swing.JTextField txtmapel;
     private javax.swing.JTextField txtnama;
